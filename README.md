@@ -133,5 +133,5 @@ To add a new endpoint:
 
 ## License
 
-Specify your license here (e.g., MIT License).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
