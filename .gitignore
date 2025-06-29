@@ -1,0 +1,43 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+env/
+.venv/
+.virtualenv/
+*.egg-info/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE settings
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Unit test / coverage
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+
+# Uvicorn reload artifacts
+*.pid
+
+# Environment / config
+.env
+.env.*
+
+# Build artifacts
+dist/
+build/
+
+# Requirements lock (optional)
+pip-log.txt
+pip-delete-this-directory.txt
