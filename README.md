@@ -1,8 +1,9 @@
-Certainly! Here's an updated README focused on your FastAPI backend with dynamic service-based endpoints, ZMQ receiver, and data querying features — simplified and without CORS details:
-
----
-
 # ZMQ Receiver Backend with FastAPI and Dynamic Services
+
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110.0-green.svg)](https://fastapi.tiangolo.com/)
+[![Uvicorn](https://img.shields.io/badge/Uvicorn-0.29.0-blue.svg)](https://www.uvicorn.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 This project provides a backend server built with **FastAPI** that asynchronously receives data via **ZeroMQ (ZMQ)**, buffers recent messages, and exposes flexible REST API endpoints dynamically registered from service classes.
 
