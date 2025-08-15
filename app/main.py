@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api import endpoints
-from app.zmq_receiver import zmq_receiver
+from app.zmq_receiver import zmq_receiver_data, zmq_receiver_odb
 
 app = FastAPI()
 
@@ -17,14 +17,16 @@ app.add_middleware(
 # Register your API endpoints
 app.include_router(endpoints.router, prefix="/api")
 
-# Start ZMQ receiver when app launches
+# Start ZMQ receivers when app launches
 @app.on_event("startup")
 def on_startup():
-    print("[Startup] Starting ZMQ receiver...")
-    zmq_receiver.start()
+    print("[Startup] Starting ZMQ receivers...")
+    zmq_receiver_data.start()
+    zmq_receiver_odb.start()
 
-# Stop ZMQ receiver cleanly on shutdown
+# Stop ZMQ receivers cleanly on shutdown
 @app.on_event("shutdown")
 def on_shutdown():
-    print("[Shutdown] Stopping ZMQ receiver...")
-    zmq_receiver.stop()
+    print("[Shutdown] Stopping ZMQ receivers...")
+    zmq_receiver_data.stop()
+    zmq_receiver_odb.stop()

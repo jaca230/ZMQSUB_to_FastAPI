@@ -1,3 +1,4 @@
+# app/zmq_receiver.py
 import zmq
 import threading
 import json
@@ -19,7 +20,7 @@ class ZMQReceiver:
         poller = zmq.Poller()
         poller.register(self.socket, zmq.POLLIN)
         while self.running:
-            socks = dict(poller.poll(1000))  # timeout in milliseconds
+            socks = dict(poller.poll(1000))
             if self.socket in socks and socks[self.socket] == zmq.POLLIN:
                 try:
                     frames = self.socket.recv_multipart()
@@ -33,7 +34,7 @@ class ZMQReceiver:
                         msg = {"raw": payload_str}
                     self.buffer.append(msg)
                 except Exception as e:
-                    print(f"ZMQ receive error: {e}")
+                    print(f"ZMQ receive error ({self.topic}): {e}")
 
     def start(self):
         self.running = True
@@ -46,4 +47,6 @@ class ZMQReceiver:
     def get_buffer(self):
         return list(self.buffer)
 
-zmq_receiver = ZMQReceiver()
+# Export two global instances
+zmq_receiver_data = ZMQReceiver(zmq_url="tcp://127.0.0.1:5555", topic="DATA", maxlen=50)
+zmq_receiver_odb  = ZMQReceiver(zmq_url="tcp://127.0.0.1:5556", topic="ODB", maxlen=10)

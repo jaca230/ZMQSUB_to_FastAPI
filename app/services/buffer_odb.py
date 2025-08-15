@@ -1,23 +1,21 @@
-# app/services/buffer_service.py
-
 from .service import Service
-from app.zmq_receiver import zmq_receiver_data
+from app.zmq_receiver import zmq_receiver_odb
 from pydantic import BaseModel, Field
 from typing import Optional
 import json
 
-class BufferQueryModel(BaseModel):
+class BufferQueryModelOdb(BaseModel):
     last: Optional[int] = Field(
         default=None,
         ge=1,
         description="Number of latest messages to return. Returns all if not specified."
     )
 
-class BufferService(Service):
-    query_model = BufferQueryModel
+class BufferServiceOdb(Service):
+    query_model = BufferQueryModelOdb
 
     def get(self, last: Optional[int] = None):
-        buf = zmq_receiver_data.get_buffer()
+        buf = zmq_receiver_odb.get_buffer()
         if not buf:
             return {"data": None}
 
@@ -25,7 +23,6 @@ class BufferService(Service):
             target = buf
         else:
             if last <= 0:
-                # If last is zero or negative, return empty list (or raise error if you prefer)
                 return {"data": []}
             target = buf[-last:] if len(buf) >= last else buf
 
@@ -44,10 +41,9 @@ class BufferService(Service):
 
         parsed = [parse(m) for m in target]
 
-        # If last was 1, return the single object directly (not a list)
         if last == 1:
             return {"data": parsed[0] if parsed else None}
         else:
             return {"data": parsed}
 
-service = BufferService()
+service = BufferServiceOdb()

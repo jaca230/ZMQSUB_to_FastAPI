@@ -1,11 +1,11 @@
 from .service import Service
-from app.zmq_receiver import zmq_receiver_data
+from app.zmq_receiver import zmq_receiver_odb
 from pydantic import BaseModel, Field
 from typing import Optional
 import json
 import jsonpointer
 
-class JsonPathQueryModel(BaseModel):
+class JsonPathQueryModelOdb(BaseModel):
     last: int = Field(default=1, ge=0, description="Number of latest messages to use (0 means all)")
     json_path: str = Field(default="", description="JSON Pointer path (slash-separated, e.g. /data_products/ChannelIntegralCollection)")
 
@@ -23,18 +23,15 @@ def get_by_json_pointer(obj, pointer: str):
     except jsonpointer.JsonPointerException:
         return None
 
-class JsonPathService(Service):
-    query_model = JsonPathQueryModel
+class JsonPathServiceOdb(Service):
+    query_model = JsonPathQueryModelOdb
 
     def get(self, last: int = 1, json_path: str = ""):
-        buf = zmq_receiver_data.get_buffer()
+        buf = zmq_receiver_odb.get_buffer()
         if not buf:
             return {"data": None}
 
-        if last == 0:
-            target = buf[:]  # all messages
-        else:
-            target = buf[-last:]  # last N messages
+        target = buf[:] if last == 0 else buf[-last:]
 
         def parse(obj):
             if isinstance(obj, list) and len(obj) == 1 and isinstance(obj[0], str):
@@ -50,15 +47,11 @@ class JsonPathService(Service):
             return obj
 
         parsed = [parse(m) for m in target]
-
-        extracted = [
-            get_by_json_pointer(msg, json_path) if isinstance(msg, dict) else None
-            for msg in parsed
-        ]
+        extracted = [get_by_json_pointer(msg, json_path) if isinstance(msg, dict) else None for msg in parsed]
 
         if len(extracted) == 1:
             return {"data": extracted[0]}
         else:
             return {"data": extracted}
 
-service = JsonPathService()
+service = JsonPathServiceOdb()
