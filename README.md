@@ -49,8 +49,8 @@ This project provides a backend server built with **FastAPI** that asynchronousl
 1. Clone the repository:
 
    ```bash
-   git clone <repo-url>
-   cd <repo-folder>
+   git clone https://github.com/jaca230/ZMQSUB_to_FastAPI
+   cd ZMQSUB_to_FastAPI
    ```
 
 2. Create and activate a Python virtual environment (recommended):
@@ -74,7 +74,7 @@ This project provides a backend server built with **FastAPI** that asynchronousl
 Use the helper script to run the FastAPI server with Uvicorn:
 
 ```bash
-bash scripts/run.sh [options]
+scripts/run.sh [options]
 ```
 
 ### Available options:
